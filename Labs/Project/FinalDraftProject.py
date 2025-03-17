@@ -45,32 +45,6 @@ class Player:
         self.weapon = weapon
         self.inventory = self.load_inventory()
         self.items = self.load_items()
-# Warrior! strong attacks!
-class Warrior(Player):
-    def __init__(self, name):
-        super().__init__(name, health=30, attack=15, defense=10, weapon="Sword")
-
-# Mage, can heal at lvl 5 and shoot magic
-class Mage(Player):
-    def __init__(self, name):
-        super().__init__(name, health=30, attack=20, defense=5, weapon="Wand")
-# Priest (healer)
-
-class Priest(Player):
-    def __init__(self, name):
-        super().__init__(name, health=30, attack=8, defense=7, weapon="Staff")
-
-# Thief, who can steal from the enemy and has good attacks
-
-class Thief(Player):
-    def __init__(self, name):
-        super().__init__(name, health=30, attack=12, defense=8, weapon="Daggers")
-
-# Slime, the enemy
-# The slime is the enemy that the player will fight against 
-class Slime(Player):
-    def __init__(self):
-        super().__init__("Slime", health=60, attack=10, defense=2, weapon="Slime Body")
 
     def load_items(self):
         # Load items from the healing_items.json file
@@ -121,43 +95,26 @@ class Slime(Player):
             json.dump(player_data, file, indent=4)
         print(f"{self.name}'s data saved!")
 
-# loads the player data from the file that it wrote to: player_data.json
     @classmethod
     def load_player(cls):
         try:
             with open("player_data.json", "r") as file:
                 player_data = json.load(file)
+                # Create a Player object from the loaded data
                 player = cls(
                     player_data["name"],
                     player_data["health"],
                     player_data["attack"],
                     player_data["defense"],
-                    player_data["weapon"]
+                    player_data["weapon"],
+                    player_data["level"],
+                    player_data["experience"]
                 )
-                player.level = player_data["level"]
-                player.experience = player_data["experience"]
                 player.max_health = player_data["max_health"]
                 return player
-            # incase there is no file found, it will print out that there is no saved player data found
         except FileNotFoundError:
             print("No saved player data found!")
             return None
-        # When the user wants to restart the game (yes/no)
-    def reset_player(self):
-        # Reset the player's stats and inventory to initial state
-        self.name = "New Hero"
-        self.level = 1
-        self.experience = 0
-        self.health = 30
-        self.max_health = 30
-        self.attack = 10
-        self.defense = 5
-        self.weapon = "Sword"
-        self.inventory = {
-            "swords": {}, "food": {}, "daggers": {}, "wands": {}, "staffs": {}, "potions": {}
-        }
-        # Save the reset player data to the file
-        self.save_player()
     
     # allows hero to equip items
     def equip_item(self, item_name):
@@ -198,24 +155,48 @@ class Slime(Player):
         input("Press Enter to go back.")
     
     def use_item(self, item_name):
-    # Use consumables (food, potions, etc.)
-        for category in ["food", "potions"]:  # Check both food and potions categories
-            # Iterate over items in the category and compare the name case-insensitively
-            for stored_item_name, item in self.inventory[category].items():
-                if item_name.lower() == stored_item_name.lower():  # Case-insensitive comparison
-                    if item.category == "food":
-                        # Example: Restores 10 HP for food
-                        self.health = min(self.max_health, self.health + 10)
-                        print(f"{self.name} uses {item_name} and restores health! Current health: {self.health}.")
-                    elif item.category == "potion":
-                        # Example: Restores 30 HP for potions
-                        self.health = min(self.max_health, self.health + 30)
-                        print(f"{self.name} uses {item_name} and restores health! Current health: {self.health}.")
-                    # After using the item, remove it from the inventory
-                    del self.inventory[category][stored_item_name]
-                    return True
+        # Normalize the input to lowercase
+        item_name = item_name.lower()
+
+        # Check if the input is a general term (like "potion" or "food")
+        if item_name == "potion":  # If the player typed "potion" (case-insensitive)
+            category = "potions"
+        elif item_name == "food":  # If the player typed "food" (case-insensitive)
+            category = "food"
+        else:  # Otherwise, treat the input as an exact item name to look up
+            for category in ["food", "potions"]:
+                for stored_item_name, item in self.inventory[category].items():
+                    if item_name == stored_item_name.lower():  # Exact match for item name
+                        # Use the item and remove it
+                        if item.category == "food":
+                            self.health = min(self.max_health, self.health + 10)
+                            print(f"{self.name} uses {stored_item_name} and restores health! Current health: {self.health}.")
+                        elif item.category == "potion":
+                            self.health = min(self.max_health, self.health + 30)
+                            print(f"{self.name} uses {stored_item_name} and restores health! Current health: {self.health}.")
+                        # After using the item, remove it from the inventory
+                        del self.inventory[category][stored_item_name]
+                        return True
+            print(f"Item {item_name} is not found or cannot be used.")
+            return False
+
+        # If "potion" or "food" is matched, use the respective category
+        for stored_item_name, item in self.inventory[category].items():
+            # Use the item and remove it
+            if item.category == "food":
+                self.health = min(self.max_health, self.health + 10)
+                print(f"{self.name} uses {stored_item_name} and restores health! Current health: {self.health}.")
+            elif item.category == "potion":
+                self.health = min(self.max_health, self.health + 30)
+                print(f"{self.name} uses {stored_item_name} and restores health! Current health: {self.health}.")
+            # After using the item, remove it from the inventory
+            del self.inventory[category][stored_item_name]
+            return True
+
         print(f"Item {item_name} is not found or cannot be used.")
         return False
+
+
 
     # Take-damage function that allows the player and enemy to take damage
     def take_damage(self, damage):
@@ -251,16 +232,48 @@ class Slime(Player):
         print(f"{self.name} attacks {enemy.name} with {self.weapon} for {damage} damage! {enemy.name} has {enemy.health - damage} HP left.")
         enemy.take_damage(damage)
     
-    # Allows hero to heal an ally (only works for priest and mage)
-    def heal(self, ally):
-        if self.level >= 5:
-            heal_amount = 5
-            ally.health = min(ally.max_health, ally.health + heal_amount)
-            print(f"{self.name} heals {ally.name} for {heal_amount} health! {ally.name} now has {ally.health} HP.")
-        else:
-            print(f"{self.name} has not unlocked healing yet! (Requires level 5)")
+    # Warrior! strong attacks!
+class Warrior(Player):
+    def __init__(self, name):
+        super().__init__(name, health=30, attack=15, defense=10, weapon="Sword")
+
+# Mage, can heal at lvl 5 and shoot magic
+class Mage(Player):
+    def __init__(self, name):
+        super().__init__(name, health=30, attack=20, defense=5, weapon="Wand")
+        def heal(self, ally):
+            if self.level >= 5:
+                heal_amount = 5
+                ally.health = min(ally.max_health, ally.health + heal_amount)
+                print(f"{self.name} heals {ally.name} for {heal_amount} health! {ally.name} now has {ally.health} HP.")
+            else:
+                print(f"{self.name} has not unlocked healing yet! (Requires level 5)")
     
-    # allows heroes to attack the enemy
+
+    # Priest (healer)
+class Priest(Player):
+    def __init__(self, name):
+        super().__init__(name, health=30, attack=8, defense=7, weapon="Staff")
+        
+    # Allows hero to heal an ally (only works for priest and mage)
+    def heal(self, ally=None):
+        # If no ally is provided, the priest heals themselves
+        if ally is None:
+            ally = self
+        
+        # Healing amount is random between 10 and 20
+        heal_amount = random.randint(10, 20)
+        ally.health = min(ally.max_health, ally.health + heal_amount)
+        print(f"{self.name} heals {ally.name} for {heal_amount} health! {ally.name} now has {ally.health} HP.")
+    
+class Thief(Player):
+    def __init__(self, name):
+        super().__init__(name, health=30, attack=12, defense=8, weapon="Daggers")
+
+class Slime(Player):
+    def __init__(self):
+        super().__init__("Slime", health=60, attack=10, defense=2, weapon="Slime Body")
+# Attack enemy function, but the enemy of the slime is the hero
     def attack_enemy(self, player):
         # Generate damage based on the slime's attack, plus a random factor
         damage = self.attack + random.randint(1, 5)  # Increased random range for more variety
@@ -276,17 +289,16 @@ def slow_print(text, delay=0.05):
     print()  # Newline after the text is printed
 
 # The game function where you battle against a slime
-
 def battle(players, enemy):
-    print("A Slime draws near!")
+    slow_print("A Slime draws near!")  # Use slow_print here instead of print
     for player in players:
-        print(f"{player.name}: {player.health}/{player.max_health} HP")
+        slow_print(f"{player.name}: {player.health}/{player.max_health} HP")  # Use slow_print for player status
     
     while enemy.health > 0 and any(player.health > 0 for player in players):
         for player in players:
             if player.health > 0:
-                print("\n" + "-"*30)  # Add a separator for clarity
-                print(f"{player.name}'s Turn:")
+                slow_print("\n" + "-"*30)  # Add a separator for clarity
+                slow_print(f"{player.name}'s Turn:")  # Use slow_print here
                 # Asks for player's action
                 while True:
                     action = input(f"{player.name}, choose your action (attack, heal, use item, inventory, equip): ").strip().lower()
@@ -296,10 +308,10 @@ def battle(players, enemy):
                         if isinstance(player, (Priest, Mage)):  # Only Priests and Mages can heal
                             break
                         else:
-                            print("Invalid choice! Only Priests and Mages can heal.")
+                            slow_print("Invalid choice! Only Priests and Mages can heal.")
                             continue  # Ask for action again
                     else:
-                        print("Invalid choice, please try again.")
+                        slow_print("Invalid choice, please try again.")
                         continue
 
                 if action == "attack":
@@ -308,32 +320,31 @@ def battle(players, enemy):
                     target = random.choice(players)
                     player.heal(target)
                 elif action == "use item":
-                    item_name = input("Which item would you like to use? (Medicinal Herb, Strong Medicine, Apple): ").strip()
+                    item_name = input("Which item would you like to use? (Medicinal Herb, Strong Medicine, Potion, or Apple): ").strip()
                     if not player.use_item(item_name):
-                        print("Item could not be used.")
+                        slow_print("Item could not be used.")
                     else:
-                        print(f"{player.name} uses {item_name}!")
+                        slow_print(f"{player.name} uses {item_name}!")
                 elif action == "inventory":
                     player.show_inventory()  # Show inventory without taking a turn
                     continue  # Don't break, allow the player to pick another action
                 elif action == "equip":
-                    item_name = input("Which item would you like to equip? (Copper Sword, Leather Armor, etc.): ").strip()
+                    item_name = input("Which item would you like to equip? (Copper Sword, Leather Armor, Iron Cuirass etc. check your inventory to see what you have): ").strip()
                     if not player.equip_item(item_name):
-                        print("Item could not be equipped.")
+                        slow_print("Item could not be equipped.")
                     else:
-                        print(f"{player.name} equips {item_name}!")
+                        slow_print(f"{player.name} equips {item_name}!")
 
-                print("\n" + "-"*30)  # Add a separator for clarity
+                slow_print("\n" + "-"*30)  # Add a separator for clarity
 
                 # After player's action, the enemy attacks if still alive
                 if enemy.health > 0:
-                    print(f"{enemy.name}'s Turn:")
+                    slow_print(f"{enemy.name}'s Turn:")
                     enemy.attack_enemy(player)
                 if enemy.health <= 0:
-                    print("The Slime is defeated!")
+                    slow_print("The Slime is defeated!")
                     player.gain_experience(50)
                     return
-
                 
 
 # allows the game to be started

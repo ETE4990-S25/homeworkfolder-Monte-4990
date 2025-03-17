@@ -1,10 +1,10 @@
 {
     "name": "Anthony",
-    "level": 7,
-    "experience": 100,
-    "health": 63,
-    "max_health": 63,
-    "attack": 30,
-    "defense": 22,
-    "weapon": "liquid metal sword"
+    "level": 8,
+    "experience": 200,
+    "health": 69,
+    "max_health": 69,
+    "attack": 35,
+    "defense": 34,
+    "weapon": "copper sword"
 }

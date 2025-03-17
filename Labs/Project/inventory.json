@@ -86,16 +86,6 @@
             "name": "Health Potion",
             "category": "potion",
             "upStats": "Restores 30 HP"
-        },
-        "Medicinal Herb": {
-            "name": "Medicinal Herb",
-            "category": "potion",
-            "upStats": "Restores 10 HP"
-        },
-        "Strong Medicine": {
-            "name": "Strong Medicine",
-            "category": "potion",
-            "upStats": "Restores 30 HP"
         }
     }
 }
