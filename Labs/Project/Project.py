@@ -109,10 +109,10 @@ if __name__ == "__main__":
     main()
 
 # Anthony = Warrior("Anthony", 100)
-print(Anthony.status())
-Anthony.take_damage(25)
-print(Anthony.__str__())
-print(Anthony.status())
-Anthony.take_damage(100)
-print(Anthony.status())
+#print(Anthony.status())
+#Anthony.take_damage(25)
+#print(Anthony.__str__())
+#print(Anthony.status())
+#Anthony.take_damage(100)
+# print(Anthony.status())
 
