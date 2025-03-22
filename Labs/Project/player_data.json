@@ -1,0 +1,10 @@
+{
+    "name": "Anthony",
+    "level": 8,
+    "experience": 200,
+    "health": 69,
+    "max_health": 69,
+    "attack": 35,
+    "defense": 34,
+    "weapon": "copper sword"
+}
