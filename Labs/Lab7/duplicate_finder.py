@@ -1,7 +1,7 @@
 import os
 import hashlib
 from collections import defaultdict
-
+# This program finds duplicate files in a given directory.
 def menu():
     while True:
         print("\n--- File Duplicate Finder ---")
