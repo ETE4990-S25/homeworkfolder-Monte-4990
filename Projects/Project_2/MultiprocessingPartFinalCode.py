@@ -62,6 +62,8 @@ def run_multiprocessing_prime():
         if result > max_prime:
             max_prime = result
 
+            # print prime number and fibonacci
+
     print(f"\n highest prime number: {max_prime}")
     fib_result = fibonacci(max_prime)
     fact_result = factorial(max_prime)
