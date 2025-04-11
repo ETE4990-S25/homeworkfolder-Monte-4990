@@ -1,0 +1,16 @@
+         3339 function calls (3334 primitive calls) in 21.346 seconds
+
+   Ordered by: cumulative time
+   List reduced from 97 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     1505   21.308    0.014   21.308    0.014 {built-in method time.sleep}
+        5    0.007    0.001   19.276    3.855 4277315889.py:13(heavy)
+     1000    0.006    0.000   10.470    0.010 4277315889.py:7(medium)
+        1    0.000    0.000    2.517    2.517 4277315889.py:3(__init__)
+        4    0.002    0.000    2.060    0.515 selectors.py:310(select)
+      500    0.003    0.000    0.844    0.002 4277315889.py:10(light)
+        4    0.000    0.000    0.010    0.003 selectors.py:304(_select)
+        4    0.010    0.003    0.010    0.003 {built-in method select.select}
+        2    0.008    0.004    0.008    0.004 {method '__exit__' of 'sqlite3.Connection' objects}
+        4    0.000    0.000    0.001    0.000 events.py:87(_run)
