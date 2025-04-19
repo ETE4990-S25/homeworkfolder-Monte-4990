@@ -1,0 +1,6 @@
+line number:0
+line number:1
+line number:2
+line number:3
+line number:4
+{'grade': 0, 'GPA': 3.8, 'Backpack': {'equipped': True, 'backpack_empty': False}}
