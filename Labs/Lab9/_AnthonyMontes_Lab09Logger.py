@@ -25,3 +25,5 @@ formatter = logging.Formatter(
         "%(message)s"
     )
 )
+
+# couldn't figure it out completely but I put as much as I could together from the lecture
