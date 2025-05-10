@@ -1,0 +1,10 @@
+languages = ["french", "spanish", "english", "german", "russian", "portuguese"]
+
+difficult_languages = ["french, russian, portuguese"]
+
+print("here is a list of languages:", languages) # prints the list of languages
+
+print("difficult languages to learn are:", difficult_languages) #prints difficult languages
+
+print("if we remove the difficult languages, we are left with:", languages.remove(difficult_languages))
+# compares difficult languages to the list of languages and removes the difficult languages from the list of languages
