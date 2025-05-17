@@ -10,12 +10,12 @@ def parse_xml_to_json(xml_text: str) -> dict:
     except Exception as e:
         raise ValueError(f"Error parsing XML: {e}")
 
-## def save_json(data: dict, filepath: str):
+def save_json(data: dict, filepath: str):
     """
     Save dictionary to json file
     """
-   ## with open(filepath, "w") as f:
-   ##     json.dump(data, f, indent=2)
+    with open(filepath, "w") as f:
+        json.dump(data, f, indent=2)
 
 
 if __name__ == "__main__":
