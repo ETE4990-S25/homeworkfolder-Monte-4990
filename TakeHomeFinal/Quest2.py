@@ -1,8 +1,19 @@
 import os
 import json
+import logging
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+
+# Ensure the logs folder exists
+os.makedirs("logs", exist_ok=True)
+
+# Setup logging
+logging.basicConfig(
+    filename='logs/quest.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 # Load JSON files from a given currency folder
 def load_currency_data(currency, data_dir="data"):

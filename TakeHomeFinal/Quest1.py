@@ -7,6 +7,16 @@ from datetime import datetime, timedelta
 import random
 import logging
 
+# Make sure the logs directory exists
+os.makedirs("logs", exist_ok=True)
+
+# Set up logging file
+logging.basicConfig(
+    filename='logs/quest.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
 # logging setup
 
 logging.basicConfig(filename='logs/quest.log',
