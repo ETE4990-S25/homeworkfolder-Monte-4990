@@ -34,9 +34,18 @@ def load_currency_data(currency, data_dir="data"):
                     records.append(record)
     return pd.DataFrame(records)
 
+
 # Load 5 currencies
 currencies = ["CHF", "HUF", "INR", "KRW", "SAR"]
-df_all = pd.concat([load_currency_data(cur) for cur in currencies])
+dfs = [load_currency_data(cur) for cur in currencies]
+dfs = [df for df in dfs if not df.empty]
+
+if not dfs:
+    print("No data was loaded. Make sure your folder with json files exists.")
+    exit()
+
+df_all = pd.concat(dfs)
+print(f" Loaded {len(df_all)} rows from {len(dfs)} currencies.")
 
 # Convert to datetime and pivot
 df_all["date"] = pd.to_datetime(df_all["date"])
