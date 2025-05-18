@@ -35,7 +35,7 @@ def load_currency_data(currency, data_dir="data"):
     return pd.DataFrame(records)
 
 # Load 5 currencies
-currencies = ["EUR", "USD", "GBP", "JPY", "CNY"]
+currencies = ["CHF", "HUF", "INR", "KRW", "SAR"]
 df_all = pd.concat([load_currency_data(cur) for cur in currencies])
 
 # Convert to datetime and pivot
