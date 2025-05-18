@@ -68,17 +68,17 @@ def download_single_date(date: str, base: str):
         logging.error(f"Failed for {base} on {date}: {e}")
 
 # Download thy data for all dates from may the fourth be with you to the end
-def download_all(base: str, start="2011-05-04", end=None):
-    if end is None:
-        end = datetime.today().strftime("%Y-%m-%d")
-    dates = generate_date_range(start, end)
-    logging.info(f"Started downloading for {base}, total {len(dates)} days")
-
+def download_all(base: str, start_date="2011-05-04", end_date=None):
+    if end_date is None:
+        end_date = datetime.today().strftime("%Y-%m-%d")
+    dates = generate_date_range(start_date, end_date)
+    logging.info(f"Starting downloads for {base} from {start_date} to {end_date}")
     with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
         for date in dates:
             executor.submit(download_single_date, date, base)
 
 
 if __name__ == "__main__":
-    base_currency = random.choice(BASES)
-    download_all(base_currency)
+    currencies = ["CHF", "HUF", "INR", "KRW", "SAR"]
+    for currency in currencies:
+        download_all(currency, start_date="2011-05-04")

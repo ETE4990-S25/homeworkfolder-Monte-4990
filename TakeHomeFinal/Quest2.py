@@ -17,21 +17,32 @@ logging.basicConfig(
 
 # Load JSON files from a given currency folder
 def load_currency_data(currency, data_dir="data"):
-    files = sorted(os.listdir(os.path.join(data_dir, currency)))
+    folder = os.path.join(data_dir, currency)
+    if not os.path.exists(folder):
+        logging.warning(f"Missing folder for currency: {currency}")
+        return pd.DataFrame()
+
+    files = sorted(os.listdir(folder))
     records = []
+
     for file in files:
-        with open(os.path.join(data_dir, currency, file), 'r') as f:
-            data = json.load(f)
-            entries = data.get("results", [])
-            for entry in entries:
-                if isinstance(entry, dict):
+        path = os.path.join(folder, file)
+        with open(path, 'r') as f:
+            try:
+                data = json.load(f)
+                items = data.get("channel", {}).get("item", [])
+                if isinstance(items, dict):
+                    items = [items]  # ensure it's a list
+                for item in items:
                     record = {
                         "date": file.replace(".json", ""),
                         "currency": currency,
-                        "target": entry.get("@code", ""),
-                        "rate": float(entry.get("rate", 0))
+                        "target": item.get("targetCurrency", ""),
+                        "rate": float(item.get("exchangeRate", 0))
                     }
                     records.append(record)
+            except Exception as e:
+                logging.error(f"Failed to parse {file} for {currency}: {e}")
     return pd.DataFrame(records)
 
 
