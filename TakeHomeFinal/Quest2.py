@@ -32,18 +32,23 @@ def load_currency_data(currency, data_dir="data"):
                 data = json.load(f)
                 items = data.get("channel", {}).get("item", [])
                 if isinstance(items, dict):
-                    items = [items]  # ensure it's a list
+                    items = [items]  # ensure always list
                 for item in items:
-                    record = {
-                        "date": file.replace(".json", ""),
-                        "currency": currency,
-                        "target": item.get("targetCurrency", ""),
-                        "rate": float(item.get("exchangeRate", 0))
-                    }
-                    records.append(record)
-            except Exception as e:
-                logging.error(f"Failed to parse {file} for {currency}: {e}")
+                    try:
+                        record = {
+                            "date": file.replace(".json", ""),
+                            "currency": currency,
+                            "target": item.get("targetCurrency", ""),
+                            # for those commas in the rate
+                            "rate": float(item.get("exchangeRate", "0").replace(",", ""))
+                        }
+                        records.append(record)
+                    except Exception as parse_error:
+                        logging.error(f"Failed to parse rate in {file} for {currency}: {parse_error}")
+            except Exception as file_error:
+                logging.error(f"Failed to parse {file} for {currency}: {file_error}")
     return pd.DataFrame(records)
+
 
 
 # Load 5 currencies
@@ -86,3 +91,14 @@ plt.figure(figsize=(8,6))
 sns.heatmap(pivot_df.corr(), annot=True, cmap="coolwarm")
 plt.title("Correlation of Currencies")
 plt.show()
+
+# Findings:
+# CHF the Swiss franc's exchange rate increases the most in 2021-2022
+# KRW the South Korean won's exchange rate decreases the most throughout the years
+# SAR the saudi riyal is the second most changing currency
+# least changing currencies are INR, HUF and KRW
+# CHF has highest 30-day rolling volatility and standard deviation
+# HUF has the lowest volatility and standard deviation
+# The correlation heatmap shows that INR and HUF are the most correlated
+# SAR and CHF are the second most correlated
+# CHF and HUF are the least correlated

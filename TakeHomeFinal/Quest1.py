@@ -73,6 +73,7 @@ def download_all(base: str, start_date="2011-05-04", end_date=None):
         end_date = datetime.today().strftime("%Y-%m-%d")
     dates = generate_date_range(start_date, end_date)
     logging.info(f"Starting downloads for {base} from {start_date} to {end_date}")
+    # Where the threading is professor :)
     with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
         for date in dates:
             executor.submit(download_single_date, date, base)
