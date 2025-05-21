@@ -1,0 +1,92 @@
+{
+    "swords": {
+        "Copper Sword": {
+            "name": "Copper Sword",
+            "category": "sword",
+            "upStats": "Attack +5"
+        },
+        "Liquid Metal Sword": {
+            "name": "Liquid Metal Sword",
+            "category": "sword",
+            "upStats": "Attack +20"
+        },
+        "Falcon Blade": {
+            "name": "Falcon Blade",
+            "category": "sword",
+            "upStats": "Attack +15"
+        }
+    },
+    "armor": {
+        "Leather Armor": {
+            "name": "Leather Armor",
+            "category": "armor",
+            "upStats": "Defense +3"
+        },
+        "Iron Cuirass": {
+            "name": "Iron Cuirass",
+            "category": "armor",
+            "upStats": "Defense +6"
+        },
+        "Dragon Mail": {
+            "name": "Dragon Mail",
+            "category": "armor",
+            "upStats": "Defense +10"
+        },
+        "Platinum Mail": {
+            "name": "Platinum Mail",
+            "category": "armor",
+            "upStats": "Defense +12"
+        }
+    },
+    "daggers": {
+        "Bronze Knife": {
+            "name": "Bronze Knife",
+            "category": "dagger",
+            "upStats": "Attack +3"
+        },
+        "Poison Needle": {
+            "name": "Poison Needle",
+            "category": "dagger",
+            "upStats": "Attack +4"
+        }
+    },
+    "wands": {
+        "Wizard's Wand": {
+            "name": "Wizard's Wand",
+            "category": "wand",
+            "upStats": "Attack +7"
+        },
+        "Runic Staff": {
+            "name": "Runic Staff",
+            "category": "wand",
+            "upStats": "Attack +8"
+        }
+    },
+    "staffs": {
+        "Angel's Rod": {
+            "name": "Angel's Rod",
+            "category": "staff",
+            "upStats": "Defense +5"
+        },
+        "Sage's Staff": {
+            "name": "Sage's Staff",
+            "category": "staff",
+            "upStats": "Defense +7"
+        }
+    },
+    "food": {
+        "Apple": {
+            "name": "Apple",
+            "category": "food",
+            "upStats": "Restores 10 HP"
+        }
+    },
+    "potions": {
+        "Health Potion": {
+            "name": "Health Potion",
+            "category": "potion",
+            "upStats": "Restores 30 HP"
+        }
+    }
+}
+

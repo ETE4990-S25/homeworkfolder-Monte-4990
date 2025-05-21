@@ -1,0 +1,12 @@
+{
+    "Medicinal Herb": {
+        "name": "Medicinal Herb",
+        "category": "healing",
+        "upStats": "Restores 10 HP"
+    },
+    "Strong Medicine": {
+        "name": "Strong Medicine",
+        "category": "healing",
+        "upStats": "Restores 30 HP"
+    }
+}
